@@ -12,55 +12,119 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
             color: #fff;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .noise-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+        }
+
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
-        }
-
-        .container {
-            text-align: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.5s ease-out;
-        }
-
-        .container.show {
-            opacity: 1;
-            transform: translateY(0);
+            justify-content: center;
+            background: #0a0a0a;
+            z-index: 100;
+            animation: fadeOut 0.8s ease-out 2.2s forwards;
         }
 
         .welcome-text {
-            font-size: clamp(1.5rem, 4vw, 3rem);
-            font-weight: 300;
-            margin-bottom: 2rem;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 500;
+            letter-spacing: -0.5px;
             opacity: 0;
-            animation: fadeInUp 1s ease-out 0.5s forwards;
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 3s forwards;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .status-dot {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 3.2s forwards;
         }
 
         .profile-container {
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1.5s forwards;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
         }
 
         .profile-image {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            margin: 0 auto 2rem;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 2px solid #333;
             padding: 4px;
-            transition: transform 0.3s ease;
-        }
-
-        .profile-image:hover {
-            transform: scale(1.05);
+            transition: all 0.3s ease;
         }
 
         .profile-image img {
@@ -70,29 +134,219 @@
             object-fit: cover;
         }
 
-        .x-button {
-            display: inline-block;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 12px 30px;
-            border-radius: 25px;
-            color: #fff;
-            text-decoration: none;
+        .profile-glow {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00ff88, #0099ff);
+            filter: blur(20px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 400px;
+            margin: 0 auto 2rem;
+            line-height: 1.5;
+        }
+
+        .skills {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .skill-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 500;
-            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 2.5s forwards;
         }
 
-        .x-button:hover {
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+        .skill-tag:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
         }
 
-        @keyframes fadeInUp {
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #0099ff);
+            color: #000;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+        }
+
+        .crypto-prices {
+            padding: 2rem 0 3rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 3.4s forwards;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .price-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-width: 160px;
+            max-width: 180px;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00ff88, #0099ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .price-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .price-card:hover::before {
+            opacity: 1;
+        }
+
+        .crypto-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .crypto-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            color: #fff;
+        }
+
+        .crypto-symbol {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .crypto-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            background: linear-gradient(135deg, #00ff88, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .crypto-change {
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .crypto-change.positive {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+        }
+
+        .crypto-change.negative {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+        }
+
+        .loading {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes slideUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -103,39 +357,173 @@
             }
         }
 
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
         @media (max-width: 768px) {
-            .profile-image {
-                width: 100px;
-                height: 100px;
+            .container {
+                padding: 0 1rem;
             }
             
-            .x-button {
-                padding: 10px 25px;
-                font-size: 1rem;
+            .header {
+                padding: 1rem 0;
+            }
+            
+            .hero {
+                padding: 1.5rem 0 2rem;
+            }
+            
+            .crypto-prices {
+                padding: 1.5rem 0 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+            }
+
+            .price-grid {
+                gap: 1rem;
+            }
+
+            .price-card {
+                min-width: 140px;
+                max-width: 150px;
+                padding: 1rem;
+            }
+
+            .crypto-price {
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="container">
+    <div class="noise-bg"></div>
+    <div class="grid-bg"></div>
+    
+    <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-text">Hi, welcome to nullm1nt</div>
-        
-        <div class="profile-container">
-            <div class="profile-image">
-                <img src="https://pbs.twimg.com/profile_images/1940878171538067456/ywf_HY78_400x400.jpg" alt="nullm1nt profile">
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">nullm1nt</div>
+            <div class="status-dot">
+                <div class="dot"></div>
+                Available for projects
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="profile-container">
+                <div class="profile-glow"></div>
+                <div class="profile-image">
+                    <img src="https://pbs.twimg.com/profile_images/1940878171538067456/ywf_HY78_400x400.jpg" alt="nullm1nt">
+                </div>
             </div>
             
-            <a href="https://x.com/nullm1nt" class="x-button" target="_blank">
-                𝕏 Profile
-            </a>
-        </div>
+            <h1 class="title">nullm1nt</h1>
+            <p class="subtitle">Creates cool shit and shares cool info in crypto & AI</p>
+            
+            <div class="skills">
+                <div class="skill-tag">🤖 AI Development</div>
+                <div class="skill-tag">₿ Crypto Trading</div>
+                <div class="skill-tag">🔗 Blockchain</div>
+                <div class="skill-tag">📊 Data Analysis</div>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="https://x.com/nullm1nt" class="btn btn-primary" target="_blank">Follow on 𝕏</a>
+                <a href="https://github.com/nullm1nt" class="btn btn-secondary" target="_blank">GitHub</a>
+            </div>
+        </section>
+
+        <section class="crypto-prices">
+            <h2 class="section-title">Live Crypto Prices</h2>
+            <div class="price-grid">
+                <div class="price-card">
+                    <div class="crypto-icon">₿</div>
+                    <div class="crypto-name">Bitcoin</div>
+                    <div class="crypto-symbol">BTC</div>
+                    <div class="crypto-price" id="btc-price">
+                        <span class="loading">Loading...</span>
+                    </div>
+                    <div class="crypto-change" id="btc-change">
+                        <span class="loading">--</span>
+                    </div>
+                </div>
+                
+                <div class="price-card">
+                    <div class="crypto-icon">◎</div>
+                    <div class="crypto-name">Solana</div>
+                    <div class="crypto-symbol">SOL</div>
+                    <div class="crypto-price" id="sol-price">
+                        <span class="loading">Loading...</span>
+                    </div>
+                    <div class="crypto-change" id="sol-change">
+                        <span class="loading">--</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
+        // Welcome screen sequence
         window.addEventListener('load', function() {
             setTimeout(function() {
-                document.getElementById('container').classList.add('show');
-            }, 300);
+                document.getElementById('welcomeScreen').style.display = 'none';
+            }, 3000);
+        });
+
+        // Fetch crypto prices from CoinGecko API
+        async function fetchCryptoPrices() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana&vs_currencies=usd&include_24hr_change=true');
+                const data = await response.json();
+                
+                // Update Bitcoin
+                const btcPrice = data.bitcoin.usd;
+                const btcChange = data.bitcoin.usd_24h_change;
+                document.getElementById('btc-price').innerHTML = `$${btcPrice.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+                
+                const btcChangeElement = document.getElementById('btc-change');
+                btcChangeElement.textContent = `${btcChange >= 0 ? '+' : ''}${btcChange.toFixed(2)}%`;
+                btcChangeElement.className = `crypto-change ${btcChange >= 0 ? 'positive' : 'negative'}`;
+                
+                // Update Solana
+                const solPrice = data.solana.usd;
+                const solChange = data.solana.usd_24h_change;
+                document.getElementById('sol-price').innerHTML = `$${solPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                
+                const solChangeElement = document.getElementById('sol-change');
+                solChangeElement.textContent = `${solChange >= 0 ? '+' : ''}${solChange.toFixed(2)}%`;
+                solChangeElement.className = `crypto-change ${solChange >= 0 ? 'positive' : 'negative'}`;
+                
+            } catch (error) {
+                console.error('Error fetching crypto prices:', error);
+                document.getElementById('btc-price').innerHTML = '<span class="loading">Error loading</span>';
+                document.getElementById('sol-price').innerHTML = '<span class="loading">Error loading</span>';
+            }
+        }
+
+        // Initial load and refresh every 30 seconds
+        window.addEventListener('load', function() {
+            setTimeout(fetchCryptoPrices, 3500); // Load after welcome screen
+            setInterval(fetchCryptoPrices, 30000); // Update every 30 seconds
         });
     </script>
 </body>
